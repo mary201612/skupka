@@ -2691,7 +2691,24 @@ document.addEventListener('DOMContentLoaded', () => {
         try { result = JSON.parse(text); } catch (e) { result = { ok: false, message: 'Некорректный ответ сервера' }; }
 
         if (!response.ok || !result.ok) {
-          throw new Error(result.message || ('Ошибка сервера: HTTP ' + response.status));
+          // Если с фото не получилось — автоматически шлём текстовую версию, лид не теряется
+          if (payload.photos.length > 0) {
+            const retryPayload = Object.assign({}, payload, {
+              photos: [],
+              form_source: (payload.form_source || '') + ' ⚠ фото не прилепились — попросить в Telegram'
+            });
+            const r2 = await fetch(LEAD_ENDPOINT, { method: 'POST', body: JSON.stringify(retryPayload) });
+            const t2 = await r2.text();
+            let res2 = { ok: false };
+            try { res2 = JSON.parse(t2); } catch (e2) {}
+            if (r2.ok && res2.ok) {
+              result = { ok: true, photo_fallback: true };
+            } else {
+              throw new Error(res2.message || result.message || 'Не удалось отправить заявку');
+            }
+          } else {
+            throw new Error(result.message || ('Ошибка сервера: HTTP ' + response.status));
+          }
         }
 
         // Очищаем форму и открываем модальное окно успеха
