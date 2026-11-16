@@ -168,6 +168,7 @@ const LEAD_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyMx4qMQkPSdvtttt
       if (!r.ok || !j.ok) throw new Error(j.message || 'Ошибка отправки');
       form.reset();
       show('Заявка принята! Перезвоним в течение 5 минут — или звоните сами: +7 (900) 021-88-83.', 'ok');
+      if (window.ym) { try { ym(113939222, 'reachGoal', 'lead_sent'); } catch(e){} }
     }catch(err){
       show('Не удалось отправить. Позвоните: +7 (900) 021-88-83 или напишите в WhatsApp.', 'err');
     }finally{

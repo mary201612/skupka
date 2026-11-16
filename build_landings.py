@@ -106,6 +106,7 @@ const LEAD_ENDPOINT = '%(endpoint)s';
       if (!r.ok || !j.ok) throw new Error(j.message || 'Ошибка отправки');
       form.reset();
       show('Заявка принята! Перезвоним в течение 5 минут — или звоните сами: %(phone)s.', 'ok');
+      if (window.ym) { try { ym(%(metrika)s, 'reachGoal', 'lead_sent'); } catch(e){} }
     }catch(err){
       show('Не удалось отправить. Позвоните: %(phone)s или напишите в WhatsApp.', 'err');
     }finally{
@@ -383,7 +384,7 @@ def build(p, others):
   Работаем ежедневно 9:00–21:00. <a href="/privacy.html">Политика конфиденциальности</a>
 </div></footer>
 
-<script>{FORM_JS % {'endpoint': ENDPOINT, 'source': 'Лендинг: ' + p['h1'], 'phone': PHONE1}}</script>
+<script>{FORM_JS % {'endpoint': ENDPOINT, 'source': 'Лендинг: ' + p['h1'], 'phone': PHONE1, 'metrika': METRIKA}}</script>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
 (function(m,e,t,r,i,k,a){{m[i]=m[i]||function(){{(m[i].a=m[i].a||[]).push(arguments)}};

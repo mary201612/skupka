@@ -2811,6 +2811,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Очищаем форму и открываем модальное окно успеха
         form.reset();
+        if (window.ym) { try { ym(113939222, 'reachGoal', 'lead_sent'); } catch (errYm) {} }
         filesStore = [];
         syncInputAndRender();
         if (popupOverlay) popupOverlay.classList.remove('active');
